@@ -1,6 +1,5 @@
 ---
 import "../styles/global.css";
-import Footer from '../components/Footer.astro';
 ---
 
 <html lang="en">
@@ -16,7 +15,6 @@ import Footer from '../components/Footer.astro';
     <canvas id="bg"></canvas>
     <nav>
       <a href="/">Home</a>
-      <a href="/about/">About</a>
       <a href="/photos/">Photos</a>
     </nav>
 
@@ -25,11 +23,13 @@ import Footer from '../components/Footer.astro';
     <script>
       import "../scripts/home-scene.ts";
     </script>
-    
-    <h2>
-      About Me: 
-      I'm a learning develeloper from Finland. I to do low-level system design, I also enjoy cybersecurity. 
-    </h2>
-    <Footer />
+
+    <h2>About Me</h2>
+    <div class="about">
+      <p>
+        I'm a learning software developer from Finland. I'm into low-level
+        systems, networking, and cybersecurity.
+      </p>
+    </div>
   </body>
 </html>

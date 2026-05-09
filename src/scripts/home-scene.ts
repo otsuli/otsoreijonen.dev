@@ -24,7 +24,7 @@ function initScene() {
   renderer.setClearColor(0x000000); // black background
 
   // Position camera along z-axis
-  camera.position.setZ(30);
+  camera.position.setZ(50);
 
   const pointLight = new THREE.PointLight(0xffffff); // 0x means it's a hexadecimal value, ffffff is white
   pointLight.position.set(10, 10, 10);
@@ -44,6 +44,13 @@ window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 });
+
+function moveCamera() {
+  const t = document.body.getBoundingClientRect().top;
+
+  camera.position.z = Math.max(8, 50 + t * 0.05);
+}
+document.body.onscroll = moveCamera; 
 
 function animiate() {
   requestAnimationFrame(animiate); // mechanism that tells the browser that you want to perform an animation
