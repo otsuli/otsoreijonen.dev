@@ -6,12 +6,11 @@
 *::before {
   box-sizing: border-box;
   margin: 0;
-  
 }
 
 * {
   box-sizing: border-box;
-  position: aboslute;  
+  position: aboslute;
 }
 
 :root {
@@ -70,9 +69,29 @@ h1 {
   font-weight: bold;
   font-family: Arial, sans-serif;
 }
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
 p {
   font-family: Arial, sans-serif;
   color: var(--text-color);
   font-size: 20px;
+}
+
+h2 {
+  margin-top: 1000px;
+  margin-bottom: 1000px
+}
+
+footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 3px;
+  background-color: black;
+  color: black;
+  border-radius: 10px;
+  padding-bottom: 30px;
 }
