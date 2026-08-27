@@ -40,9 +40,6 @@
 }
 
 body {
-	background-image: url('/background.svg');
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
+	background-color: #000000;
+  background-image: linear-gradient(180deg, #000000 0%, #616161 100%);
 }
