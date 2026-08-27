@@ -1,17 +1,122 @@
 ---
+import "../styles/global.css";
+import Navigation from '../components/Navigation.astro';
 
+const pageTitle = "Otso Reijonen";
 ---
 
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>{pageTitle}</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="bg-black min-h-screen text-white">
+		<Navigation />
+
+		<main class="flex items-start justify-start px-6 pt-16 sm:px-10 lg:px-20">
+			<div id="island" class="island bg-zinc-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-10 lg:p-12 w-full max-w-[600px] shadow-2xl">
+				<h1 class="box w-full min-h-32 flex items-center justify-start text-white text-[clamp(1.75rem,5vw,3rem)] pl-0 sm:pl-8 lg:pl-20 font-bold font-manrope rounded-lg whitespace-nowrap">
+					Otso Reijonen
+				</h1>
+				<div class="description mt-6 text-lg text-zinc-300" style="perspective: 500px;">
+					A software developer learning the ropes. I'm passionate about computers,
+					cyber-security, low-level programming, finance, and photography.
+				</div>
+			</div>
+		</main>
+
+		<script>
+			import gsap from "gsap";
+			import { SplitText } from "gsap/SplitText";
+
+			gsap.registerPlugin(SplitText);
+
+			const island = document.getElementById("island")!;
+			const description = document.querySelector<HTMLElement>(".description")!;
+
+			let split;
+			let entrance;
+
+			// Re-wrap the description into lines so the overflow-hidden masks match
+			// the current wrap points.
+			function splitDescription() {
+				split && split.revert();
+				split = SplitText.create(description, {
+					type: "lines",
+					mask: "lines", // auto-wraps each line in an overflow-hidden container
+				});
+				return split;
+			}
+
+			// Entrance animation — runs exactly once. fromTo (not from) so the end
+			// state is explicit rather than "wherever the element happens to be".
+			document.fonts.ready.then(() => {
+				const lines = splitDescription().lines;
+
+				entrance = gsap.timeline()
+					.fromTo(".box",
+						{ x: -200 },
+						{ x: 0, duration: 0.8, ease: "power2.out" })
+					.fromTo(lines,
+						{ yPercent: 100, opacity: 0 },
+						{ yPercent: 0, opacity: 1, duration: 0.8, ease: "power3", stagger: 0.15 });
+			});
+
+			// On resize, only re-split the description. Re-running the entrance
+			// timeline here stranded .box at x:-200 (off-screen), because dragging a
+			// window edge fires resize every frame and no timeline ever got to finish.
+			let resizeTimer = 0;
+			let lastWidth = window.innerWidth;
+
+			window.addEventListener("resize", () => {
+				// Ignore height-only changes (mobile URL bar show/hide).
+				if (window.innerWidth === lastWidth) return;
+				lastWidth = window.innerWidth;
+
+				clearTimeout(resizeTimer);
+				resizeTimer = window.setTimeout(() => {
+					// Reverting mid-entrance would destroy the lines being animated and
+					// leave them at opacity 0, so finish the timeline first.
+					entrance && entrance.isActive() && entrance.progress(1);
+					splitDescription();
+				}, 150);
+			});
+
+			// Floating idle animation
+			gsap.to(island, {
+				y: -12,
+				duration: 2.5,
+				ease: "sine.inOut",
+				repeat: -1,
+				yoyo: true,
+			});
+
+			// Mouse-tilt parallax
+			const maxTilt = 8; // degrees
+
+			island.addEventListener("mousemove", (e) => {
+				const rect = island.getBoundingClientRect();
+				const x = (e.clientX - rect.left) / rect.width - 0.5;
+				const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+				gsap.to(island, {
+					rotationY: x * maxTilt * 2,
+					rotationX: -y * maxTilt * 2,
+					transformPerspective: 800,
+					duration: 0.4,
+					ease: "power2.out",
+				});
+			});
+
+			island.addEventListener("mouseleave", () => {
+				gsap.to(island, {
+					rotationY: 0,
+					rotationX: 0,
+					duration: 0.6,
+					ease: "power3.out",
+				});
+			});
+		</script>
 	</body>
 </html>

@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import url('https://googleapis.com');
+@import "tailwindcss";
+
+@theme {
+    --font-inter: "Inter", sans-serif; 
+    --font-manrope: "Manrope", sans-serif; 
+}
+
+@layer utilities {
+  .after-line {
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .after-line::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 1px;
+    width: 0;
+    background-color: currentColor;
+    transition: width 0.3s ease, left 0.3s ease;
+  }
+
+  .after-line:hover {
+    color: grey;
+  }
+
+  .after-line:hover::after {
+    width: 100%;
+    left: 0;
+  }
+}
+
+::selection {
+  background-color: gray;
+  color: white;
+}
+
+body {
+	background-image: url('/background.svg');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
